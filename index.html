@@ -82,15 +82,15 @@
       margin-top: 10px;
     }
 
-    .poor { color: #FF4C4C; }
-    .fair { color: #FFD93D; }
-    .good { color: #4CAF50; }
-    .excellent { color: #ADF5B4; }
+    .poor { color: ##EAECE8; }
+    .fair { color: ##EAECE8; }
+    .good { color: ##EAECE8; }
+    .excellent { color: ##EAECE8; }
   </style>
 </head>
 <body>
 
-  <h1>Three Network Coverage</h1>
+  <h1>Honest coverage</h1>
   <p>Enter your postcode below to check coverage</p>
 
   <div class="form-container">
@@ -134,23 +134,23 @@
 
         switch(coverage) {
           case 1:
-            coverageText = 'Poor coverage 📶';
+            coverageText = 'Poor coverage 🫢';
             coverageClass = 'poor';
             break;
           case 2:
-            coverageText = 'Fair coverage 📶📶';
+            coverageText = 'Fair coverage 😞';
             coverageClass = 'fair';
             break;
           case 3:
-            coverageText = 'Good coverage 📶📶📶';
+            coverageText = 'Good coverage 🙂';
             coverageClass = 'good';
             break;
           case 4:
-            coverageText = 'Excellent coverage 📶📶📶📶';
+            coverageText = 'Excellent coverage 🤩';
             coverageClass = 'excellent';
             break;
           default:
-            coverageText = 'Unknown coverage';
+            coverageText = 'Unknown coverage 🤔';
             coverageClass = '';
         }
 
