@@ -6,7 +6,7 @@
     /* Body and background */
     body {
       font-family: sans-serif;
-      text-align: center; /* centers the form container */
+      text-align: center;
       margin: 0;
       padding-top: 50px;
       min-height: 100vh;
@@ -16,48 +16,46 @@
 
     /* Headings */
     h1 {
-      color: #ADF5B4; /* Honest Lime for heading */
+      color: #ADF5B4; /* Honest Lime */
       margin-bottom: 10px;
     }
 
     p {
-      color: #F2F7FB; /* Sky for paragraph text */
+      color: #F2F7FB; /* Sky */
       margin-bottom: 10px;
     }
 
     /* Form container */
     .form-container {
-      display: inline-block; /* allows form to be centered */
-      text-align: left;      /* left-align text inside form */
+      display: inline-block;
+      text-align: left;
       padding: 20px;
-      background: rgba(0, 0, 0, 0.02); /* subtle Off-White background */
+      background: rgba(0, 0, 0, 0.02);
       border-radius: 12px;
     }
 
-    /* Form fields */
     label {
       display: block;
       margin-bottom: 5px;
-      color: #C6CFFF; /* Lilac label */
+      color: #C6CFFF; /* Lilac */
     }
 
     input {
       padding: 8px 12px;
       margin-bottom: 15px;
       border-radius: 8px;
-      border: 1px solid #EAECE8; /* subtle grey border */
+      border: 1px solid #EAECE8;
       width: 250px;
       display: block;
-      background-color: #F2F7FB; /* Sky input background */
-      color: #1A2925; /* Kelp text */
+      background-color: #F2F7FB;
+      color: #1A2925;
     }
 
-    /* Submit button */
     button {
       padding: 10px 20px;
       border-radius: 8px;
-      background: #ADF5B4; /* Honest Lime */
-      color: #1A2925; /* Kelp text */
+      background: #ADF5B4;
+      color: #1A2925;
       border: none;
       cursor: pointer;
       font-weight: bold;
@@ -65,77 +63,103 @@
     }
 
     button:hover {
-      background: #C6CFFF; /* Lilac on hover */
+      background: #C6CFFF;
     }
 
     /* Results container */
     .results {
-      display: none; /* hidden initially */
+      display: none;
       margin-top: 20px;
       padding: 15px;
       border-radius: 12px;
       background: rgba(0, 0, 0, 0.05);
-      text-align: left;
-      color: #1A2925; /* Kelp text for results */
+      text-align: center;
     }
 
-    .results h2 {
-      color: #ADF5B4; /* Honest Lime heading */
-      margin-bottom: 10px;
+    .coverage-text {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-top: 10px;
     }
 
-    .results p {
-      margin: 5px 0;
-    }
+    .poor { color: #FF4C4C; }
+    .fair { color: #FFD93D; }
+    .good { color: #4CAF50; }
+    .excellent { color: #ADF5B4; }
   </style>
 </head>
 <body>
 
-  <h1>Want some speed?</h1>
-  <p>Enter your postcode below to run a speedtest</p>
+  <h1>Three Network Coverage</h1>
+  <p>Enter your postcode below to check coverage</p>
 
   <div class="form-container">
     <form id="speedForm">
       <label for="postcode">Full postcode:</label>
       <input type="text" id="postcode" name="postcode" required>
 
-      <button type="submit">Submit</button>
+      <button type="submit">Check Coverage</button>
     </form>
   </div>
 
   <div class="results" id="results">
-    <h2>Speedtest Results</h2>
-    <p id="download"></p>
-    <p id="upload"></p>
-    <p id="ping"></p>
+    <h2>Coverage Result</h2>
+    <div id="coverage" class="coverage-text"></div>
   </div>
 
   <script>
     const form = document.getElementById('speedForm');
     const resultsDiv = document.getElementById('results');
+    const coverageDiv = document.getElementById('coverage');
 
     form.addEventListener('submit', function(e) {
-      e.preventDefault(); // prevent normal form submission
-
+      e.preventDefault();
       const data = new FormData(form);
 
-      fetch('https://hook.eu2.make.com/8jrfv4ezy9a2lqbrnvaah3sry5od9csw', { 
+      coverageDiv.innerText = 'Checking coverage...';
+      coverageDiv.className = 'coverage-text';
+      resultsDiv.style.display = 'block';
+
+      fetch('https://hook.eu2.make.com/8jrfv4ezy9a2lqbrnvaah3sry5od9csw', {
         method: 'POST',
         body: data
       })
       .then(res => res.json())
       .then(result => {
-        // hide the form
         form.style.display = 'none';
 
-        // show results div
-        resultsDiv.style.display = 'block';
-        document.getElementById('download').innerText = 'Download: ' + result.download;
-        document.getElementById('upload').innerText = 'Upload: ' + result.upload;
-        document.getElementById('ping').innerText = 'Ping: ' + result.ping;
+        const coverage = parseInt(result.coverage, 10);
+        let coverageText = '';
+        let coverageClass = '';
+
+        switch(coverage) {
+          case 1:
+            coverageText = 'Poor coverage 📶';
+            coverageClass = 'poor';
+            break;
+          case 2:
+            coverageText = 'Fair coverage 📶📶';
+            coverageClass = 'fair';
+            break;
+          case 3:
+            coverageText = 'Good coverage 📶📶📶';
+            coverageClass = 'good';
+            break;
+          case 4:
+            coverageText = 'Excellent coverage 📶📶📶📶';
+            coverageClass = 'excellent';
+            break;
+          default:
+            coverageText = 'Unknown coverage';
+            coverageClass = '';
+        }
+
+        coverageDiv.innerText = coverageText;
+        coverageDiv.classList.add(coverageClass);
       })
       .catch(err => {
-        alert('Error fetching results: ' + err);
+        coverageDiv.innerText = 'Error fetching coverage: ' + err;
+        coverageDiv.className = 'coverage-text';
       });
     });
   </script>
