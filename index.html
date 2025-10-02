@@ -16,7 +16,7 @@
 
     /* Headings */
     h1 {
-      color: #ADF5B4; /* Lilac for heading */
+      color: #ADF5B4; /* Honest Lime for heading */
       margin-bottom: 10px;
     }
 
@@ -30,7 +30,7 @@
       display: inline-block; /* allows form to be centered */
       text-align: left;      /* left-align text inside form */
       padding: 20px;
-      background: rgba(0, 0, 0, 0.02); /* Off-White subtle background */
+      background: rgba(0, 0, 0, 0.02); /* subtle Off-White background */
       border-radius: 12px;
     }
 
@@ -48,7 +48,7 @@
       border: 1px solid #EAECE8; /* subtle grey border */
       width: 250px;
       display: block;
-      background-color: #F2F7FB; /* Sky background for input */
+      background-color: #F2F7FB; /* Sky input background */
       color: #1A2925; /* Kelp text */
     }
 
@@ -68,6 +68,25 @@
       background: #C6CFFF; /* Lilac on hover */
     }
 
+    /* Results container */
+    .results {
+      display: none; /* hidden initially */
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.05);
+      text-align: left;
+      color: #1A2925; /* Kelp text for results */
+    }
+
+    .results h2 {
+      color: #ADF5B4; /* Honest Lime heading */
+      margin-bottom: 10px;
+    }
+
+    .results p {
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
@@ -76,13 +95,50 @@
   <p>Enter your postcode below to run a speedtest</p>
 
   <div class="form-container">
-    <form action="https://hook.eu2.make.com/8jrfv4ezy9a2lqbrnvaah3sry5od9csw" method="POST">
+    <form id="speedForm">
       <label for="postcode">Full postcode:</label>
       <input type="text" id="postcode" name="postcode" required>
 
       <button type="submit">Submit</button>
     </form>
   </div>
+
+  <div class="results" id="results">
+    <h2>Speedtest Results</h2>
+    <p id="download"></p>
+    <p id="upload"></p>
+    <p id="ping"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('speedForm');
+    const resultsDiv = document.getElementById('results');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // prevent normal form submission
+
+      const data = new FormData(form);
+
+      fetch('YOUR_MAKE_WEBHOOK_URL', { // replace with your Make.com webhook
+        method: 'POST',
+        body: data
+      })
+      .then(res => res.json())
+      .then(result => {
+        // hide the form
+        form.style.display = 'none';
+
+        // show results div
+        resultsDiv.style.display = 'block';
+        document.getElementById('download').innerText = 'Download: ' + result.download;
+        document.getElementById('upload').innerText = 'Upload: ' + result.upload;
+        document.getElementById('ping').innerText = 'Ping: ' + result.ping;
+      })
+      .catch(err => {
+        alert('Error fetching results: ' + err);
+      });
+    });
+  </script>
 
 </body>
 </html>
