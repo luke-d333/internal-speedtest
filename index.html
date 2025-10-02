@@ -1,10 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Test Page</title>
+  <title>Internal Speedtest</title>
+  <style>
+    /* Body and background */
+    body {
+      font-family: sans-serif;
+      text-align: center; /* centers the form container */
+      margin: 0;
+      padding-top: 50px;
+      min-height: 100vh;
+      background: #1A2925; /* Kelp background */
+      color: #EAECE8; /* Grey text */
+    }
+
+    /* Headings */
+    h1 {
+      color: #ADF5B4; /* Lilac for heading */
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #F2F7FB; /* Sky for paragraph text */
+      margin-bottom: 10px;
+    }
+
+    /* Form container */
+    .form-container {
+      display: inline-block; /* allows form to be centered */
+      text-align: left;      /* left-align text inside form */
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.02); /* Off-White subtle background */
+      border-radius: 12px;
+    }
+
+    /* Form fields */
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #C6CFFF; /* Lilac label */
+    }
+
+    input {
+      padding: 8px 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #EAECE8; /* subtle grey border */
+      width: 250px;
+      display: block;
+      background-color: #F2F7FB; /* Sky background for input */
+      color: #1A2925; /* Kelp text */
+    }
+
+    /* Submit button */
+    button {
+      padding: 10px 20px;
+      border-radius: 8px;
+      background: #ADF5B4; /* Honest Lime */
+      color: #1A2925; /* Kelp text */
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #C6CFFF; /* Lilac on hover */
+    }
+
+  </style>
 </head>
 <body>
-  <h1>GitHub Pages is working!</h1>
-  <p>If you see this text, your site is live.</p>
+
+  <h1>Want some speed?</h1>
+  <p>Enter your postcode below to run a speedtest</p>
+
+  <div class="form-container">
+    <form action="/submit" method="POST">
+      <label for="postcode">Full postcode:</label>
+      <input type="text" id="postcode" name="postcode" required>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
 </body>
 </html>
