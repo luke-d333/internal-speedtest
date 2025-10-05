@@ -3,29 +3,19 @@
 <head>
   <title>Internal Speedtest</title>
   <style>
-    /* Body and background */
     body {
       font-family: sans-serif;
       text-align: center;
       margin: 0;
       padding-top: 50px;
       min-height: 100vh;
-      background: #1A2925; /* Kelp background */
-      color: #EAECE8; /* Grey text */
+      background: #1A2925;
+      color: #EAECE8;
     }
 
-    /* Headings */
-    h1 {
-      color: #ADF5B4; /* Honest Lime */
-      margin-bottom: 10px;
-    }
+    h1 { color: #ADF5B4; margin-bottom: 10px; }
+    p { color: #F2F7FB; margin-bottom: 10px; }
 
-    p {
-      color: #F2F7FB; /* Sky */
-      margin-bottom: 10px;
-    }
-
-    /* Form container */
     .form-container {
       display: inline-block;
       text-align: left;
@@ -34,12 +24,7 @@
       border-radius: 12px;
     }
 
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: #C6CFFF; /* Lilac */
-    }
-
+    label { display: block; margin-bottom: 5px; color: #C6CFFF; }
     input {
       padding: 8px 12px;
       margin-bottom: 15px;
@@ -62,11 +47,10 @@
       transition: all 0.3s ease;
     }
 
-    button:hover {
-      background: #C6CFFF;
-    }
+    button:hover { background: #C6CFFF; }
 
-    /* Results container */
+    .button-row { display: flex; gap: 10px; }
+
     .results {
       display: none;
       margin-top: 20px;
@@ -76,16 +60,11 @@
       text-align: center;
     }
 
-    .coverage-text {
-      font-weight: bold;
-      font-size: 1.2em;
-      margin-top: 10px;
-    }
-
-    .poor { color: ##EAECE8; }
-    .fair { color: ##EAECE8; }
-    .good { color: ##EAECE8; }
-    .excellent { color: ##EAECE8; }
+    .coverage-text { font-weight: bold; font-size: 1.2em; margin-top: 10px; }
+    .poor { color: #EAECE8; }
+    .fair { color: #EAECE8; }
+    .good { color: #EAECE8; }
+    .excellent { color: #EAECE8; }
   </style>
 </head>
 <body>
@@ -98,7 +77,10 @@
       <label for="postcode">Full postcode</label>
       <input type="text" id="postcode" name="postcode" required>
 
-      <button type="submit">Check Coverage 🚀</button>
+      <div class="button-row">
+        <button type="submit">Check Coverage 🚀</button>
+        <button type="button" onclick="getLocation()">Use my location 📍</button>
+      </div>
     </form>
   </div>
 
@@ -107,11 +89,14 @@
     <div id="coverage" class="coverage-text"></div>
   </div>
 
+  <p id="demo"></p>
+
   <script>
     const form = document.getElementById('speedForm');
     const resultsDiv = document.getElementById('results');
     const coverageDiv = document.getElementById('coverage');
 
+    // Handle postcode submission
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       const data = new FormData(form);
@@ -127,41 +112,68 @@
       .then(res => res.json())
       .then(result => {
         form.style.display = 'none';
-
-        const coverage = parseInt(result.coverage, 10);
-        let coverageText = '';
-        let coverageClass = '';
-
-        switch(coverage) {
-          case 1:
-            coverageText = 'Poor coverage 🫢';
-            coverageClass = 'poor';
-            break;
-          case 2:
-            coverageText = 'Fair coverage 😞';
-            coverageClass = 'fair';
-            break;
-          case 3:
-            coverageText = 'Good coverage 🙂';
-            coverageClass = 'good';
-            break;
-          case 4:
-            coverageText = 'Excellent coverage 🤩';
-            coverageClass = 'excellent';
-            break;
-          default:
-            coverageText = 'Unknown coverage 🤔';
-            coverageClass = '';
-        }
-
-        coverageDiv.innerText = coverageText;
-        coverageDiv.classList.add(coverageClass);
+        displayCoverage(result.coverage);
       })
       .catch(err => {
         coverageDiv.innerText = 'Error fetching coverage: ' + err;
         coverageDiv.className = 'coverage-text';
       });
     });
+
+    // Handle geolocation
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(sendCoordinates, showError);
+      } else {
+        document.getElementById("demo").innerHTML = "Geolocation not supported.";
+      }
+    }
+
+    function sendCoordinates(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      const data = new FormData();
+      data.append("latitude", lat);
+      data.append("longitude", lon);
+
+      coverageDiv.innerText = 'Checking coverage...';
+      coverageDiv.className = 'coverage-text';
+      resultsDiv.style.display = 'block';
+
+      fetch('https://hook.eu2.make.com/8jrfv4ezy9a2lqbrnvaah3sry5od9csw', {
+        method: 'POST',
+        body: data
+      })
+      .then(res => res.json())
+      .then(result => displayCoverage(result.coverage))
+      .catch(err => {
+        coverageDiv.innerText = 'Error fetching coverage: ' + err;
+        coverageDiv.className = 'coverage-text';
+      });
+    }
+
+    function showError() {
+      document.getElementById("demo").innerHTML = "Sorry, location not available.";
+    }
+
+    // Reusable coverage display
+    function displayCoverage(coverageValue) {
+      const coverage = parseInt(coverageValue, 10);
+      let coverageText = '';
+      let coverageClass = '';
+
+      switch(coverage) {
+        case 1: coverageText = 'Poor coverage 🫢'; coverageClass = 'poor'; break;
+        case 2: coverageText = 'Fair coverage 😞'; coverageClass = 'fair'; break;
+        case 3: coverageText = 'Good coverage 🙂'; coverageClass = 'good'; break;
+        case 4: coverageText = 'Excellent coverage 🤩'; coverageClass = 'excellent'; break;
+        default: coverageText = 'Unknown coverage 🤔'; coverageClass = '';
+      }
+
+      coverageDiv.innerText = coverageText;
+      coverageDiv.className = 'coverage-text ' + coverageClass;
+    }
   </script>
 
 </body>
