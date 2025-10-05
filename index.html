@@ -60,7 +60,7 @@
       text-align: center;
     }
 
-    .coverage-text { font-weight: bold; font-size: 1.2em; margin-top: 10px; }
+    .coverage-text { font-weight: medium; font-size: 1.2em; margin-top: 10px; }
     .poor { color: #EAECE8; }
     .fair { color: #EAECE8; }
     .good { color: #EAECE8; }
@@ -76,24 +76,24 @@
   </style>
 </head>
 <body>
-  <h1>Coverage checker 📶</h1>
+  <h1>Classic SIM coverage checker</h1>
   <div class="text-container">
     <p>Enter your postcode below to check coverage in your area, or click "Use my location" to automatically detect your location</p>
   </div>
   <div class="form-container">
     <form id="speedForm">
-      <label for="postcode">Full postcode</label>
+      <label for="postcode">Enter postcode below</label>
       <input type="text" id="postcode" name="postcode" required>
 
       <div class="button-row">
-        <button type="submit">Check Coverage 🚀</button>
+        <button type="submit">Submit postcode ✅</button>
         <button type="button" onclick="getLocation()">Use my location 📍</button>
       </div>
     </form>
   </div>
 
   <div class="results" id="results">
-    <h2>Your coverage results 📶 </h2>
+    <h2>Your coverage result 🏆 </h2>
     <div id="coverage" class="coverage-text"></div>
   </div>
 
