@@ -30,7 +30,7 @@
       margin-bottom: 15px;
       border-radius: 8px;
       border: 1px solid #EAECE8;
-      width: 250px;
+      width: 305px;
       display: block;
       background-color: #F2F7FB;
       color: #1A2925;
@@ -65,13 +65,23 @@
     .fair { color: #EAECE8; }
     .good { color: #EAECE8; }
     .excellent { color: #EAECE8; }
+    
+    .text-container {
+  max-width: 350px;      /* sets the boundary width */
+  margin: 0 auto;         /* centers the container */
+  padding: 10px;          /* optional spacing inside */
+  text-align: center;     /* keep text centered */
+  word-wrap: break-word;  /* ensures long text wraps inside */
+}
+
+    
   </style>
 </head>
 <body>
-
   <h1>Coverage checker 📶</h1>
-  <p>Enter your postcode (no spaces) below to check coverage</p>
-
+  <div class="text-container">
+  <p>Enter your postcode (no spaces) below to check coverage in your area, or click the "Use my location" button to automatically detect your location and see local coverage.</p>
+</div>
   <div class="form-container">
     <form id="speedForm">
       <label for="postcode">Full postcode</label>
@@ -85,7 +95,7 @@
   </div>
 
   <div class="results" id="results">
-    <h2>Coverage Result</h2>
+    <h2>Your coverage results 📶 </h2>
     <div id="coverage" class="coverage-text"></div>
   </div>
 
